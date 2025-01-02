@@ -446,6 +446,41 @@
         font-size: 24px;
         margin: 20px;
 }
+#welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 1000;
+        }
+#welcome-screen h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+#welcome-screen p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+#welcome-screen button {
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color: #00bfff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #ffffff;
+    transition: background-color 0.3s;
+}
+#welcome-screen button:hover {
+    background-color: #009acd;
+}
+
     </style>
 </head>
 <body>
@@ -458,6 +493,11 @@
             <div id="loading-progress-text">0%</div>
         </div>
         <div id="loading-progress-message">Зачаруй все кристаллы Лилика!</div>
+    </div>
+    <div id="welcome-screen" style="display: none;">
+    <h1>Добро пожаловать в Lilik Enchantment!</h1>
+    <p>Начните свое волшебное путешествие прямо сейчас!</p>
+    <button id="start-button">Начать добычу</button>
     </div>
     <div id="nav-place"></div>
     <div class="nav-buttons">
@@ -495,11 +535,12 @@
 </div>
     <div id="support-window" class="mini-window">
         <h2>Поддержка</h2>
-        <p>Здесь будет информация о поддержке.</p>
+        <p>При неполадках обращаться к силе Кристалла</p>
     </div>
     <div id="info-window" class="mini-window">
         <h2>Информация</h2>
-        <p>Здесь будет информация.</p>
+        <p>Это игра-кликер. Кликай по Кристаллу и получай очки!</p>
+        <p>Идейный вдохновитель - LiliFox</p>
     </div>
     <div id="mine" class="page active">
         <div class="name">Lilik Enchantment</div>
@@ -557,15 +598,21 @@ applyGradientButton.addEventListener('click', () => {
         const loadingProgressBar = document.getElementById('loading-progress-bar');
         const loadingProgressText = document.getElementById('loading-progress-text');
         let loadingProgress = 0;
-        const loadingInterval = setInterval(() => {
-            loadingProgress += 6;
-            loadingProgressBar.style.width = `${loadingProgress}%`;
-            loadingProgressText.textContent = `${loadingProgress}%`;
-            if (loadingProgress >= 100) {
-                clearInterval(loadingInterval);
-                document.getElementById('loading-screen').style.display = 'none';
-            }
-        }, 100);
+const loadingInterval = setInterval(() => {
+    loadingProgress += 6;
+    loadingProgressBar.style.width = `${loadingProgress}%`;
+    loadingProgressText.textContent = `${loadingProgress}%`;
+    if (loadingProgress >= 100) {
+        clearInterval(loadingInterval);
+        document.getElementById('loading-screen').style.display = 'none';
+        document.getElementById('welcome-screen').style.display = 'flex'; // Показать второе окно
+    }
+}, 100);
+document.getElementById('start-button').addEventListener('click', () => {
+    document.getElementById('welcome-screen').style.display = 'none';
+    document.getElementById('mine').classList.add('active'); // Показать основную страницу
+});
+
         let score = 0;
         let upgradeCosts = [2248, 5000, 10000, 15000];
         let coinValue = 1;
