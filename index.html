@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <title>Lilik Enchantment</title>
     <style>
+        /* Основные стили */
         body {
             font-family: 'Roboto', sans-serif;
             text-align: center;
@@ -20,7 +21,21 @@
             color: #ffffff;
             overflow: hidden;
             position: relative;
+            transition: transform 0.3s ease-in-out;
         }
+
+        /* Контейнер приложения с фиксированными размерами мобильного устройства */
+        #app-container {
+            width: 375px; /* Ширина мобильного устройства (например, iPhone 8) */
+            height: 667px; /* Высота мобильного устройства */
+            overflow: hidden;
+            position: relative;
+            background-color: #000; /* Фон для контейнера */
+            border: 1px solid #444; /* Дополнительная рамка для визуализации */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Остальные существующие стили */
         .stars {
             position: absolute;
             top: 0;
@@ -31,22 +46,26 @@
             overflow: hidden;
             z-index: -1;
         }
+
         .star {
             position: absolute;
             background: #ffffff;
             border-radius: 50%;
             animation: twinkle 2s infinite;
         }
+
         @keyframes twinkle {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+
         .name, h1, h3, #shareButton, #dailyBonus {
             color: #ffffff;
             font-size: 36px;
             margin-bottom: 20px;
             animation: textShadow 2s infinite;
         }
+
         #shareButton, #dailyBonus {
             position: relative;
             font-size: 16px;
@@ -57,23 +76,27 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
         }
+
         #shareButton:hover, #dailyBonus:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
+
         #shareButton:active, #dailyBonus:active {
             background-color: #00ffff;
             transform: scale(0.95);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         @keyframes textShadow {
             0% { text-shadow: 0 0 5px #00ffff; }
             50% { text-shadow: 0 0 10px #00ffff; }
             100% { text-shadow: 0 0 5px #00ffff; }
         }
+
         #coin {
-            width: 534px;
-            height: 534px;
+            width: 50%;
+            height: 50%;
             background-color: transparent;
             border-radius: 50%;
             margin: 80px auto;
@@ -86,9 +109,11 @@
             align-items: center;
             justify-content: center;
         }
+
         #coin:active {
             animation: coinPress 0.3s;
         }
+
         @keyframes coinPress {
             0% {
                 transform: scale(1.8);
@@ -103,6 +128,7 @@
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             }
         }
+
         #score, #upgscore, #nameupg {
             font-size: 28px;
             margin-top: 20px;
@@ -113,6 +139,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             animation: textShadow 2s infinite;
         }
+
         #upgscore {
             position: fixed;
             top: 10px;
@@ -124,6 +151,7 @@
             font-size: 16px;
             max-width: 150px;
         }
+
         #nameupg {
             position: fixed;
             top: 10%;
@@ -134,12 +162,14 @@
             align-items: center;
             font-size: 26px;
         }
+
         #upgrades {
             max-width: 800px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
         .upgrade {
             margin: 8px;
             padding: 8px;
@@ -151,15 +181,18 @@
             color: #ffffff;
             animation: textShadow 2s infinite;
         }
+
         .upgrade:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
+
         .upgrade:active {
             background-color: #00ffff;
             transform: scale(0.95);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         @media (max-width: 600px) {
             h1 {
                 font-size: 24px;
@@ -177,16 +210,21 @@
                 font-size: 14px;
             }
         }
+
         #resetButton {
             font-size: 10px;
             color: red;
+            cursor: pointer;
+            margin-top: 10px;
         }
+
         .nav-buttons {
             position: fixed;
             bottom: 2%;
             display: flex;
             gap: 1px;
         }
+
         .nav-button {
             padding: 4px 20px;
             border: 1px solid #ccc;
@@ -199,19 +237,24 @@
             flex: 1;
             text-align: center;
         }
+
         .nav-button:hover {
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
+
         .nav-button:active {
             background-color: #00ffff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         .page {
             display: none;
         }
+
         .page.active {
             display: block;
         }
+
         #loading-screen {
             position: fixed;
             top: 0;
@@ -224,68 +267,77 @@
             align-items: center;
             z-index: 999;
             overflow: hidden;
-            background-image: url('https://raw.githubusercontent.com/0x2171/Lilik-Enchantment/refs/heads/main/images/AppArt.png'),
+            background-image: url('https://raw.githubusercontent.com/0x2171/Lilik-Enchantment/main/images/AppArt.png'),
                               linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
             background-size: cover;
             background-position: center;
             background-blend-mode: multiply;
         }
+
         #loading-spinner {
-          border: 16px solid #e6f2ff;
-          border-top: 16px solid #00bfff;
-          border-radius: 50%;
-          width: 120px;
-          height: 120px;
-          animation: spin 2s linear infinite;
-          margin-bottom: 20px;
+            border: 16px solid #e6f2ff;
+            border-top: 16px solid #00bfff;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            margin-bottom: 20px;
         }
+
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
+
         #loading-text {
-          font-size: 24px;
-          color: #ffffff;
-          margin-bottom: 10px;
-          animation: loadingtextShadow 2s infinite;
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 10px;
+            animation: loadingtextShadow 2s infinite;
         }
+
         @keyframes loadingtextShadow {
-          0% { text-shadow: 0 0 5px #ffffff, 0 0 10px #b0e0e6, 0 0 15px #48cae4, 0 0 20px #00bfff, 0 0 30px #00bfff, 0 0 40px #00bfff; }
-          50% { text-shadow: 0 0 5px #ffffff, 0 0 10px #b0e0e6, 0 0 15px #48cae4, 0 0 20px #00bfff, 0 0 30px #00bfff, 0 0 40px #00bfff; }
-          100% { text-shadow: 0 0 5px #ffffff, 0 0 10px #b0e0e6, 0 0 15px #48cae4, 0 0 20px #00bfff, 0 0 30px #00bfff, 0 0 40px #00bfff; }
+            0% { text-shadow: 0 0 5px #ffffff, 0 0 10px #b0e0e6, 0 0 15px #48cae4, 0 0 20px #00bfff, 0 0 30px #00bfff, 0 0 40px #00bfff; }
+            50% { text-shadow: 0 0 5px #ffffff, 0 0 10px #b0e0e6, 0 0 15px #48cae4, 0 0 20px #00bfff, 0 0 30px #00bfff, 0 0 40px #00bfff; }
+            100% { text-shadow: 0 0 5px #ffffff, 0 0 10px #b0e0e6, 0 0 15px #48cae4, 0 0 20px #00bfff, 0 0 30px #00bfff, 0 0 40px #00bfff; }
         }
+
         #loading-progress {
-          width: 200px;
-          height: 20px;
-          background-color: #d1ecf1;
-          border-radius: 5px;
-          margin: 0 auto;
-          position: relative;
-          overflow: hidden;
+            width: 200px;
+            height: 20px;
+            background-color: #d1ecf1;
+            border-radius: 5px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
         }
+
         #loading-progress-bar {
-          height: 100%;
-          background: linear-gradient(to right, #00bfff, #b0e0e6);
-          border-radius: 5px;
-          transition: width 0.3s;
-          width: 0;
+            height: 100%;
+            background: linear-gradient(to right, #00bfff, #b0e0e6);
+            border-radius: 5px;
+            transition: width 0.3s;
+            width: 0;
         }
+
         #loading-progress-text {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          color: white;
-          font-size: 12px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
         }
+
         #loading-progress-message {
             position: fixed;
-          top: 80%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          color: white;
-          font-size: 14px;
+            top: 80%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 14px;
         }
+
         .coin-effect {
             position: absolute;
             top: 50%;
@@ -297,10 +349,12 @@
             pointer-events: none;
             cursor: none;
         }
+
         @keyframes fadeOut {
             0% { opacity: 1; transform: translate(100%, -100%) scale(1); }
             100% { opacity: 0; transform: translate(150%, -50%) scale(1.5); }
         }
+
         #progress-container {
             display: flex;
             align-items: center;
@@ -308,6 +362,7 @@
             margin-top: 20px;
             width: 100%;
         }
+
         #progress-bar {
             width: 200px;
             height: 20px;
@@ -317,12 +372,14 @@
             position: relative;
             padding: 0;
         }
+
         #progress-bar-fill {
             height: 100%;
             background-color: #00ffff;
             border-radius: 5px;
             transition: width 0.3s;
         }
+
         #progress-text {
             position: absolute;
             top: 50%;
@@ -331,9 +388,11 @@
             color: white;
             font-size: 12px;
         }
+
         #current-level, #next-level {
             color: #00ffff;
         }
+
         #airdrop-info {
             margin-top: 20px;
             font-size: 15px;
@@ -344,6 +403,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             animation: textShadow 2s infinite;
         }
+
         #light-effect {
             position: absolute;
             top: 50%;
@@ -358,11 +418,13 @@
             pointer-events: none;
             transition: opacity 1s ease-in-out;
         }
+
         @keyframes changeColor {
             0% { background: radial-gradient(circle, rgba(0,255,255,0.6) 0%, rgba(0,255,255,0) 100%); }
             50% { background: radial-gradient(circle, rgba(0,191,255,0.6) 0%, rgba(0,191,255,0) 100%); }
             100% { background: radial-gradient(circle, rgba(0,255,255,0.6) 0%, rgba(0,255,255,0) 100%); }
         }
+
         #menu-button {
             position: fixed;
             top: 10px;
@@ -377,15 +439,18 @@
             color: #ffffff;
             animation: textShadow 2s infinite;
         }
+
         #menu-button:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
+
         #menu-button:active {
             background-color: #00ffff;
             transform: scale(0.95);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         #menu {
             position: fixed;
             top: 0;
@@ -401,9 +466,11 @@
             justify-content: center;
             z-index: 1000;
         }
+
         #menu.open {
             transform: translateX(0);
         }
+
         #menu button {
             background-color: rgba(255, 255, 255, 0.2);
             border: 1px solid #ccc;
@@ -417,15 +484,18 @@
             animation: textShadow 2s infinite;
             width: 80%;
         }
+
         #menu button:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
+
         #menu button:active {
             background-color: #00ffff;
             transform: scale(0.95);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
         .mini-window {
             position: fixed;
             top: 50%;
@@ -439,14 +509,17 @@
             display: none;
             z-index: 1001;
         }
+
         .mini-window.open {
             display: block;
         }
-    #gradientSelect, #applyGradientButton, #settings-close-button {
-        font-size: 24px;
-        margin: 20px;
-}
-#welcome-screen {
+
+        #gradientSelect, #applyGradientButton, #settings-close-button {
+            font-size: 24px;
+            margin: 20px;
+        }
+
+        #welcome-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -459,160 +532,195 @@
             background-color: black;
             z-index: 1000;
         }
-#welcome-screen h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-}
-#welcome-screen p {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
-#welcome-screen button {
-    font-size: 16px;
-    padding: 10px 20px;
-    background-color: #00bfff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    color: #ffffff;
-    transition: background-color 0.3s;
-}
-#welcome-screen button:hover {
-    background-color: #009acd;
-}
 
+        #welcome-screen h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        #welcome-screen p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        #welcome-screen button {
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #00bfff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: background-color 0.3s;
+        }
+
+        #welcome-screen button:hover {
+            background-color: #009acd;
+        }
     </style>
 </head>
 <body>
-    <div class="stars"></div>
-    <div id="loading-screen">
-        <div id="loading-spinner"></div>
-        <div id="loading-text">Loading</div>
-        <div id="loading-progress">
-            <div id="loading-progress-bar"></div>
-            <div id="loading-progress-text">0%</div>
-        </div>
-        <div id="loading-progress-message">Зачаруй все кристаллы Лилика!</div>
-    </div>
-    <div id="welcome-screen" style="display: none;">
-    <h1>Добро пожаловать в Lilik Enchantment!</h1>
-    <p>Начните свое волшебное путешествие прямо сейчас!</p>
-    <button id="start-button">Начать добычу</button>
-    </div>
-    <div id="nav-place"></div>
-    <div class="nav-buttons">
-        <a href="#mine" class="nav-button">💠 Enchanting</a>
-        <a href="#upgrade" class="nav-button">🌀 Upgrade</a>
-        <a href="#airdrop" class="nav-button">🌙 Moondrop</a>
-    </div>
-    <div id="menu-button">☰</div>
-    <div id="menu">
-        <button id="settings-button">Настройки</button>
-        <button id="support-button">Поддержка</button>
-        <button id="info-button">Информация</button>
-    </div>
-<div id="settings-window" class="mini-window">
-    <h2>Настройки</h2>
-    <div>Выбрать цвет заднего фона:</div>
-    <select id="gradientSelect">
-        <option value="radial-gradient(circle at center, #000000, #191970)">Blue Cosmic</option>
-        <option value="linear-gradient(120deg, #8e44ad, #2196f3, #21cbf5, #4caf50, #ffeb3b, #ff9800, #ff5722, #f44336, #9c27b0)">Rainbow</option>
-        <option value="linear-gradient(135deg, #000000, #000000, #000000, #000000, #000000, #000000, #000000, #000000, #000000)">Black</option>
-        <option value="linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)">Soft Sunset</option>
-        <option value="linear-gradient(to right, #ff7e5f, #feb47b)">Peach</option>
-        <option value="linear-gradient(to right, #6a11cb, #2575fc)">Deep Blue</option>
-        <option value="linear-gradient(to right, #ffecd2, #fcb69f)">Warm Sunrise</option>
-        <option value="linear-gradient(to right, #ff758c, #ff7eb3)">Pink Lemonade</option>
-        <option value="linear-gradient(to right, #00c6ff, #0072ff)">Aqua Marine</option>
-        <option value="linear-gradient(to right, #fc00ff, #00dbde)">Vice City</option>
-        <option value="linear-gradient(to right, #ff416c, #ff4b2b)">Sunset Orange</option>
-        <option value="linear-gradient(to right, #85ffbd, #fffb7d)">Spring Warmth</option>
-    </select>
-    <button id="applyGradientButton">Apply</button>
-    <div>Сбросить весь прогресс:</div>
-    <div id="resetButton">Reset all progress</div>
-    <button id="settings-close-button">Close</button>
-</div>
-    <div id="support-window" class="mini-window">
-        <h2>Поддержка</h2>
-        <p>При неполадках обращаться к силе Кристалла</p>
-    </div>
-    <div id="info-window" class="mini-window">
-        <h2>Информация</h2>
-        <p>Это игра-кликер. Кликай по Кристаллу и получай очки!</p>
-        <p>Идейный вдохновитель - LiliFox</p>
-    </div>
-    <div id="mine" class="page active">
-        <div class="name">Lilik Enchantment</div>
-        <div id="coin">
-            <img src="https://raw.githubusercontent.com/0x2171/Lilik-Enchantment/refs/heads/main/images/u2b50_u1f48e.png" alt="Coin" style="width: 90%; height: 90%;">
-        </div>
-        <div id="score">Sparks: 0</div>
-        <div id="progress-container">
-            <div id="current-level">1</div>
-            <div id="progress-bar">
-                <div id="progress-bar-fill"></div>
-                <div id="progress-text"></div>
+    <div id="app-container">
+        <div class="stars"></div>
+        <div id="loading-screen">
+            <div id="loading-spinner"></div>
+            <div id="loading-text">Loading</div>
+            <div id="loading-progress">
+                <div id="loading-progress-bar"></div>
+                <div id="loading-progress-text">0%</div>
             </div>
-        <div id="next-level">2</div>
+            <div id="loading-progress-message">Зачаруй все кристаллы Лилика!</div>
         </div>
-        <div id="dailyBonus">Daily Bonus: Click to claim!</div>
-    </div>
-    <div id="upgrade" class="page">
-        <div id="upgscore">Sparks: 0</div>
-        <div id="upgrades">
-            <div class="upgrade" id="upgrade1"></div>
-            <div class="upgrade" id="upgrade2"></div>
-            <div class="upgrade" id="upgrade3"></div>
-            <div class="upgrade" id="upgrade4"></div>
+        <div id="welcome-screen" style="display: none;">
+            <h1>Добро пожаловать в Lilik Enchantment!</h1>
+            <p>Начните свое волшебное путешествие прямо сейчас!</p>
+            <button id="start-button">Начать добычу</button>
         </div>
-    </div>
-    <div id="airdrop" class="page">
-        <h1>Moondrop</h1>
-        <h3>Listing Information</h3>
-        <div id="airdrop-info">
-            <p>Coin Name: Lilik Spark</p>
-            <p>Ticker: LILIK</p>
-            <p>Total Supply: 500 Telegram Stars</p>
-            <p>Circulating Supply: </p>
-            <p>Moondrop Date: TBA</p>
-            <p>Moondrop Amount: TBA</p>
+        <div id="nav-place"></div>
+        <div class="nav-buttons">
+            <a href="#mine" class="nav-button">💠<br/>Enchanting</a>
+            <a href="#upgrade" class="nav-button">🌀<br/>Upgrade</a>
+            <a href="#airdrop" class="nav-button">🌙<br/>Moondrop</a>
         </div>
-        <div id="shareButton">Share your progress</div>
+        <div id="menu-button">☰</div>
+        <div id="menu">
+            <button id="settings-button">Настройки</button>
+            <button id="support-button">Поддержка</button>
+            <button id="info-button">Информация</button>
+        </div>
+        <div id="settings-window" class="mini-window">
+            <h2>Настройки</h2>
+            <div>Выбрать цвет заднего фона:</div>
+            <select id="gradientSelect">
+                <option value="radial-gradient(circle at center, #000000, #191970)">Blue Cosmic</option>
+                <option value="linear-gradient(120deg, #8e44ad, #2196f3, #21cbf5, #4caf50, #ffeb3b, #ff9800, #ff5722, #f44336, #9c27b0)">Rainbow</option>
+                <option value="linear-gradient(135deg, #000000, #000000, #000000, #000000, #000000, #000000, #000000, #000000, #000000)">Black</option>
+                <option value="linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)">Soft Sunset</option>
+                <option value="linear-gradient(to right, #ff7e5f, #feb47b)">Peach</option>
+                <option value="linear-gradient(to right, #6a11cb, #2575fc)">Deep Blue</option>
+                <option value="linear-gradient(to right, #ffecd2, #fcb69f)">Warm Sunrise</option>
+                <option value="linear-gradient(to right, #ff758c, #ff7eb3)">Pink Lemonade</option>
+                <option value="linear-gradient(to right, #00c6ff, #0072ff)">Aqua Marine</option>
+                <option value="linear-gradient(to right, #fc00ff, #00dbde)">Vice City</option>
+                <option value="linear-gradient(to right, #ff416c, #ff4b2b)">Sunset Orange</option>
+                <option value="linear-gradient(to right, #85ffbd, #fffb7d)">Spring Warmth</option>
+            </select>
+            <button id="applyGradientButton">Применить</button>
+            <div>Сбросить весь прогресс:</div>
+            <div id="resetButton">Reset all progress</div>
+            <button id="settings-close-button">Close</button>
+        </div>
+        <div id="support-window" class="mini-window">
+            <h2>Поддержка</h2>
+            <p>При неполадках обращаться к силе Кристалла</p>
+        </div>
+        <div id="info-window" class="mini-window">
+            <h2>Информация</h2>
+            <p>Это игра-кликер. Кликай по Кристаллу и получай очки!</p>
+            <p>Идейный вдохновитель - LiliFox</p>
+        </div>
+        <div id="mine" class="page active">
+            <div class="name">Lilik Enchantment</div>
+            <div id="coin">
+                <img src="https://raw.githubusercontent.com/0x2171/Lilik-Enchantment/main/images/u2b50_u1f48e.png" alt="Coin" style="width: 90%; height: 90%;">
+                <div id="light-effect"></div>
+            </div>
+            <div id="score">Sparks: 0</div>
+            <div id="progress-container">
+                <div id="current-level">1</div>
+                <div id="progress-bar">
+                    <div id="progress-bar-fill"></div>
+                    <div id="progress-text">0%</div>
+                </div>
+                <div id="next-level">2</div>
+            </div>
+            <div id="dailyBonus">Daily Bonus: Click to claim!</div>
+        </div>
+        <div id="upgrade" class="page">
+            <div id="upgscore">Sparks: 0</div>
+            <div id="upgrades">
+                <div class="upgrade" id="upgrade1">🚀 Coins +1 (Cost: 2248)</div>
+                <div class="upgrade" id="upgrade2">🛸 Coins +2 (Cost: 5000)</div>
+                <div class="upgrade" id="upgrade3">🌌 Coins +3 (Cost: 10000)</div>
+                <div class="upgrade" id="upgrade4">🌠 Coins +5 (Cost: 15000)</div>
+            </div>
+        </div>
+        <div id="airdrop" class="page">
+            <h1>Moondrop</h1>
+            <h3>Listing Information</h3>
+            <div id="airdrop-info">
+                <p>Coin Name: Lilik Spark</p>
+                <p>Ticker: LILIK</p>
+                <p>Total Supply: 500 Telegram Stars</p>
+                <p>Circulating Supply: </p>
+                <p>Moondrop Date: TBA</p>
+                <p>Moondrop Amount: TBA</p>
+            </div>
+            <div id="shareButton">Share your progress</div>
+        </div>
     </div>
     <script>
-    const gradientSelect = document.getElementById('gradientSelect');
-const applyGradientButton = document.getElementById('applyGradientButton');
+        // Функция для определения мобильного устройства
+        function isMobileDevice() {
+            return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
 
-applyGradientButton.addEventListener('click', () => {
-  const gradientValue = gradientSelect.value;
-  if (gradientValue) {
-    document.body.style.background = gradientValue;
-  }
-});
+        // Функция для масштабирования контента до мобильного разрешения
+        function adjustForDesktop() {
+            if (!isMobileDevice()) {
+                const appContainer = document.getElementById('app-container');
+                const scaleWidth = window.innerWidth / 375; // 375px — ширина мобильного контейнера
+                const scaleHeight = window.innerHeight / 667; // 667px — высота мобильного контейнера
+                const scale = Math.min(scaleWidth, scaleHeight);
 
+                appContainer.style.transform = `scale(${scale})`;
+                appContainer.style.transformOrigin = 'top left';
 
+                // Центрируем контейнер
+                document.body.style.display = 'flex';
+                document.body.style.alignItems = 'center';
+                document.body.style.justifyContent = 'center';
+                document.body.style.backgroundColor = '#000'; // Можно изменить фон по необходимости
+            } else {
+                // Если мобильное устройство, сбрасываем масштаб
+                const appContainer = document.getElementById('app-container');
+                appContainer.style.transform = `scale(1)`;
+                document.body.style.display = 'flex';
+                document.body.style.alignItems = 'center';
+                document.body.style.justifyContent = 'center';
+            }
+        }
+
+        // Вызов функции при загрузке страницы и при изменении размера окна
+        window.addEventListener('load', adjustForDesktop);
+        window.addEventListener('resize', adjustForDesktop);
+
+        // Начальная настройка Telegram WebApp
         const tgwindow = window.Telegram.WebApp;
         tgwindow.isExpanded;
         tgwindow.expand();
+
+        // Загрузка экрана
         const loadingProgressBar = document.getElementById('loading-progress-bar');
         const loadingProgressText = document.getElementById('loading-progress-text');
         let loadingProgress = 0;
-const loadingInterval = setInterval(() => {
-    loadingProgress += 6;
-    loadingProgressBar.style.width = `${loadingProgress}%`;
-    loadingProgressText.textContent = `${loadingProgress}%`;
-    if (loadingProgress >= 100) {
-        clearInterval(loadingInterval);
-        document.getElementById('loading-screen').style.display = 'none';
-        document.getElementById('welcome-screen').style.display = 'flex'; // Показать второе окно
-    }
-}, 100);
-document.getElementById('start-button').addEventListener('click', () => {
-    document.getElementById('welcome-screen').style.display = 'none';
-    document.getElementById('mine').classList.add('active'); // Показать основную страницу
-});
+        const loadingInterval = setInterval(() => {
+            loadingProgress += 6;
+            loadingProgressBar.style.width = `${loadingProgress}%`;
+            loadingProgressText.textContent = `${loadingProgress}%`;
+            if (loadingProgress >= 100) {
+                clearInterval(loadingInterval);
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('welcome-screen').style.display = 'flex'; // Показать второе окно
+            }
+        }, 100);
 
+        document.getElementById('start-button').addEventListener('click', () => {
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('mine').classList.add('active'); // Показать основную страницу
+        });
+
+        // Инициализация игрового состояния
         let score = 0;
         let upgradeCosts = [2248, 5000, 10000, 15000];
         let coinValue = 1;
@@ -635,17 +743,18 @@ document.getElementById('start-button').addEventListener('click', () => {
         let lightIntensity = 0;
         const maxLightIntensity = 1;
         const fadeInterval = 300;
-        const lightEffect = document.createElement('div');
-        lightEffect.id = 'light-effect';
-        coin.appendChild(lightEffect);
+        const lightEffect = document.getElementById('light-effect');
+
         function updateLightEffect() {
             lightEffect.style.opacity = lightIntensity;
             lightEffect.style.background = `radial-gradient(circle, rgba(0,${getColorComponent()},${getColorComponent()},0.6) 0%, rgba(0,${getColorComponent()},${getColorComponent()},0) 100%)`;
         }
+
         function getColorComponent() {
             const hue = Math.floor(lightIntensity * 255);
             return hue < 128 ? hue * 2 : 255 - (hue - 128) * 2;
         }
+
         function fadeLightEffect() {
             if (lightIntensity > 0) {
                 lightIntensity -= 0.1;
@@ -655,6 +764,9 @@ document.getElementById('start-button').addEventListener('click', () => {
                 updateLightEffect();
             }
         }
+
+        let fadeIntervalId = setInterval(fadeLightEffect, fadeInterval);
+
         coin.addEventListener('click', () => {
             score += coinValue;
             updateScore();
@@ -670,7 +782,7 @@ document.getElementById('start-button').addEventListener('click', () => {
             clearInterval(fadeIntervalId);
             fadeIntervalId = setInterval(fadeLightEffect, fadeInterval);
         });
-        let fadeIntervalId = setInterval(fadeLightEffect, fadeInterval);
+
         upgrades.forEach((upgrade, index) => {
             upgrade.addEventListener('click', () => {
                 if (score >= upgradeCosts[index]) {
@@ -682,6 +794,7 @@ document.getElementById('start-button').addEventListener('click', () => {
                 }
             });
         });
+
         function updateScore() {
             scoreDisplay.textContent = `Sparks: ${score}`;
             upgScoreDisplay.textContent = `Sparks: ${score}`;
@@ -691,6 +804,7 @@ document.getElementById('start-button').addEventListener('click', () => {
                 localStorage.setItem(`lilikUpgrade${upgradeValues[index]}Cost`, cost);
             });
         }
+
         function updateLevel() {
             for (let i = 0; i < levels.length; i++) {
                 if (score < levels[i]) {
@@ -700,10 +814,12 @@ document.getElementById('start-button').addEventListener('click', () => {
             }
             currentLevelDisplay.textContent = currentLevel;
             nextLevelDisplay.textContent = currentLevel + 1;
-            const progress = (score - (levels[currentLevel - 2] || 0)) / (levels[currentLevel - 1] - (levels[currentLevel - 2] || 0)) * 100;
+            const progress = ((score - (levels[currentLevel - 2] || 0)) / (levels[currentLevel - 1] - (levels[currentLevel - 2] || 0))) * 100;
             progressBarFill.style.width = `${progress}%`;
             progressText.textContent = `${Math.round(progress)}%`;
+            localStorage.setItem('lilikCurrentLevel', currentLevel);
         }
+
         function loadScore() {
             const savedScore = localStorage.getItem('lilikScore');
             const savedCoinValue = localStorage.getItem('lilikCoinValue');
@@ -729,15 +845,22 @@ document.getElementById('start-button').addEventListener('click', () => {
                 upgrade.innerHTML = `<span style="font-size: 50px;">${upgradeImages[index]}</span> Coins +${upgradeValues[index]} (Cost: ${upgradeCosts[index]})`;
             });
         }
+
         resetButton.addEventListener('click', () => {
-            score = 0;
-            coinValue = 1;
-            upgradeCosts = [500, 2000, 4000, 5000];
-            currentLevel = 1;
-            updateScore();
-            updateLevel();
-            localStorage.clear();
+            if (confirm('Вы уверены, что хотите сбросить весь прогресс?')) {
+                score = 0;
+                coinValue = 1;
+                upgradeCosts = [2248, 5000, 10000, 15000];
+                currentLevel = 1;
+                updateScore();
+                updateLevel();
+                localStorage.clear();
+                upgrades.forEach((upgrade, index) => {
+                    upgrade.innerHTML = `<span style="font-size: 50px;">${upgradeImages[index]}</span> Coins +${upgradeValues[index]} (Cost: ${upgradeCosts[index]})`;
+                });
+            }
         });
+
         function checkDailyBonus() {
             const lastClaim = localStorage.getItem('lastDailyClaim');
             const today = new Date().toDateString();
@@ -747,6 +870,7 @@ document.getElementById('start-button').addEventListener('click', () => {
                 dailyBonus.style.display = 'none';
             }
         }
+
         dailyBonus.addEventListener('click', () => {
             const lastClaim = localStorage.getItem('lastDailyClaim');
             const today = new Date().toDateString();
@@ -763,6 +887,7 @@ document.getElementById('start-button').addEventListener('click', () => {
                 alert('You have already claimed your daily bonus today 💠');
             }
         });
+
         const navButtons = document.querySelectorAll('.nav-button');
         navButtons.forEach(button => {
             button.addEventListener('click', (event) => {
@@ -774,6 +899,7 @@ document.getElementById('start-button').addEventListener('click', () => {
                 document.getElementById(targetId).classList.add('active');
             });
         });
+
         function showCoinEffect(value) {
             const effect = document.createElement('div');
             effect.className = 'coin-effect';
@@ -783,6 +909,7 @@ document.getElementById('start-button').addEventListener('click', () => {
                 coin.removeChild(effect);
             }, 1000);
         }
+
         shareButton.addEventListener('click', () => {
             const shareText = `I have ${score} Lilik Sparks and I am at level ${currentLevel} in Lilik Enchantment! Join @LilikEnchant_bot`;
             if (!navigator.share) {
@@ -795,6 +922,7 @@ document.getElementById('start-button').addEventListener('click', () => {
                 }).catch(error => console.error('Error sharing:', error));
             }
         });
+
         const starsContainer = document.querySelector('.stars');
         for (let i = 0; i < 200; i++) {
             const star = document.createElement('div');
@@ -806,16 +934,17 @@ document.getElementById('start-button').addEventListener('click', () => {
             star.style.animationDuration = `${Math.random() * 3 + 2}s`;
             starsContainer.appendChild(star);
         }
+
         loadScore();
         checkDailyBonus();
 
         const preloadImage = new Image();
-        preloadImage.src = 'https://raw.githubusercontent.com/0x2171/Lilik-Enchantment/refs/heads/main/images/AppArt.png';
+        preloadImage.src = 'https://raw.githubusercontent.com/0x2171/Lilik-Enchantment/main/images/AppArt.png';
         preloadImage.onload = () => {
             localStorage.setItem('backgroundImageLoaded', 'true');
         };
 
-        // Menu button functionality
+        // Функциональность кнопок меню
         const menuButton = document.getElementById('menu-button');
         const menu = document.getElementById('menu');
         const settingsButton = document.getElementById('settings-button');
@@ -857,17 +986,22 @@ document.getElementById('start-button').addEventListener('click', () => {
             infoWindow.classList.remove('open');
         });
 
-applyGradientButton.addEventListener('click', () => {
-  const gradientValue = gradientSelect.value;
-  if (gradientValue) {
-    document.body.style.background = gradientValue;
-    localStorage.setItem('selectedGradient', gradientValue);
-  }
-});
-const savedGradient = localStorage.getItem('selectedGradient');
-if (savedGradient) {
-  document.body.style.background = savedGradient;
-}
+        // Функциональность градиентов
+        const gradientSelect = document.getElementById('gradientSelect');
+        const applyGradientButton = document.getElementById('applyGradientButton');
+
+        applyGradientButton.addEventListener('click', () => {
+            const gradientValue = gradientSelect.value;
+            if (gradientValue) {
+                document.body.style.background = gradientValue;
+                localStorage.setItem('selectedGradient', gradientValue);
+            }
+        });
+
+        const savedGradient = localStorage.getItem('selectedGradient');
+        if (savedGradient) {
+            document.body.style.background = savedGradient;
+        }
     </script>
 </body>
 </html>
