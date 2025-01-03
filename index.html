@@ -1,38 +1,33 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <title>Lilik Enchantment</title>
-    <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
     <style>
-        /* Общие стили */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
         body {
             font-family: 'Roboto', sans-serif;
             text-align: center;
             background: radial-gradient(circle at center, #000000, #191970);
-            color: #ffffff;
-            height: 100vh;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            height: 100vh;
+            color: #ffffff;
             overflow: hidden;
             position: relative;
-            transition: background 0.5s ease;
         }
-        /* Звезды на фоне */
         .stars {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: transparent;
             overflow: hidden;
             z-index: -1;
         }
@@ -46,89 +41,289 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-        /* Анимация текста */
-        .animated-text {
+        .name, h1, h3, #shareButton, #dailyBonus {
+            color: #ffffff;
+            font-size: 36px;
+            margin-bottom: 20px;
             animation: textShadow 2s infinite;
         }
-        @keyframes textShadow {
-            0%, 100% { text-shadow: 0 0 5px #00ffff; }
-            50% { text-shadow: 0 0 10px #00ffff; }
-        }
-        /* Кнопки */
-        .btn {
-            border: 1px solid #ccc;
+        #shareButton, #dailyBonus {
+            position: relative;
+            font-size: 16px;
+            top: 15px;
             border-radius: 5px;
-            padding: 10px 20px;
             background-color: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin: 5px;
+            cursor: pointer;
         }
-        .btn:hover {
+        #shareButton:hover, #dailyBonus:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
-        .btn:active {
+        #shareButton:active, #dailyBonus:active {
             background-color: #00ffff;
             transform: scale(0.95);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        /* Экран загрузки */
+        @keyframes textShadow {
+            0% { text-shadow: 0 0 5px #00ffff; }
+            50% { text-shadow: 0 0 10px #00ffff; }
+            100% { text-shadow: 0 0 5px #00ffff; }
+        }
+        #coin {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            border-radius: 50%;
+            margin: 80px auto;
+            transform: scale(1.8);
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            outline: none;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #coin:active {
+            animation: coinPress 0.3s;
+        }
+        @keyframes coinPress {
+            0% {
+                transform: scale(1.8);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                transform: scale(1.7);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+            100% {
+                transform: scale(1.8);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+        }
+        #score, #upgscore, #nameupg {
+            font-size: 28px;
+            margin-top: 20px;
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: textShadow 2s infinite;
+        }
+        #upgscore {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 16px;
+            max-width: 150px;
+        }
+        #nameupg {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 26px;
+        }
+        #upgrades {
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .upgrade {
+            margin: 8px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            animation: textShadow 2s infinite;
+        }
+        .upgrade:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .upgrade:active {
+            background-color: #00ffff;
+            transform: scale(0.95);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+            #coin {
+                width: 110px;
+                height: 110px;
+            }
+            #score {
+                font-size: 20px;
+                padding: 5px 10px;
+            }
+            .upgrade {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+        #resetButton {
+            font-size: 10px;
+            color: red;
+        }
+        .nav-buttons {
+            position: fixed;
+            bottom: 2%;
+            display: flex;
+            gap: 1px;
+        }
+        .nav-button {
+            padding: 4px 20px;
+            border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            animation: textShadow 2s infinite;
+            text-decoration: none;
+            flex: 1;
+            text-align: center;
+        }
+        .nav-button:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        .nav-button:active {
+            background-color: #00ffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
         #loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://raw.githubusercontent.com/0x2171/Lilik-Enchantment/main/images/AppArt.png') center/cover,
-                        linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            z-index: 1000;
+            align-items: center;
+            z-index: 999;
+            overflow: hidden;
+            background-image: url('https://raw.githubusercontent.com/0x2171/Lilik-Enchantment/refs/heads/main/images/AppArt.png'),
+                              linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: multiply;
         }
         #loading-spinner {
-            border: 16px solid #e6f2ff;
-            border-top: 16px solid #00bfff;
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            animation: spin 2s linear infinite;
-            margin-bottom: 20px;
+          border: 16px solid #e6f2ff;
+          border-top: 16px solid #00bfff;
+          border-radius: 50%;
+          width: 120px;
+          height: 120px;
+          animation: spin 2s linear infinite;
+          margin-bottom: 20px;
         }
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
-        #loading-text, #loading-progress-message {
-            font-size: 24px;
-            color: #ffffff;
-            margin-bottom: 10px;
-            animation: loadingTextShadow 2s infinite;
+        #loading-text {
+          font-size: 24px;
+          color: #ffffff;
+          margin-bottom: 10px;
+          animation: loadingtextShadow 2s infinite;
         }
-        @keyframes loadingTextShadow {
-            0%, 100% { text-shadow: 0 0 5px #ffffff, 0 0 10px #b0e0e6, 0 0 15px #48cae4, 0 0 20px #00bfff, 0 0 30px #00bfff, 0 0 40px #00bfff; }
-            50% { text-shadow: 0 0 10px #ffffff, 0 0 15px #b0e0e6, 0 0 20px #48cae4, 0 0 25px #00bfff, 0 0 35px #00bfff, 0 0 45px #00bfff; }
+        @keyframes loadingtextShadow {
+          0% { text-shadow: 0 0 5px #ffffff, 0 0 10px #b0e0e6, 0 0 15px #48cae4, 0 0 20px #00bfff, 0 0 30px #00bfff, 0 0 40px #00bfff; }
+          50% { text-shadow: 0 0 5px #ffffff, 0 0 10px #b0e0e6, 0 0 15px #48cae4, 0 0 20px #00bfff, 0 0 30px #00bfff, 0 0 40px #00bfff; }
+          100% { text-shadow: 0 0 5px #ffffff, 0 0 10px #b0e0e6, 0 0 15px #48cae4, 0 0 20px #00bfff, 0 0 30px #00bfff, 0 0 40px #00bfff; }
         }
         #loading-progress {
-            width: 200px;
-            height: 20px;
-            background-color: #d1ecf1;
-            border-radius: 5px;
-            overflow: hidden;
-            position: relative;
-            margin: 0 auto;
+          width: 200px;
+          height: 20px;
+          background-color: #d1ecf1;
+          border-radius: 5px;
+          margin: 0 auto;
+          position: relative;
+          overflow: hidden;
         }
         #loading-progress-bar {
-            height: 100%;
-            background: linear-gradient(to right, #00bfff, #b0e0e6);
-            width: 0;
-            transition: width 0.3s;
+          height: 100%;
+          background: linear-gradient(to right, #00bfff, #b0e0e6);
+          border-radius: 5px;
+          transition: width 0.3s;
+          width: 0;
         }
         #loading-progress-text {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: white;
+          font-size: 12px;
+        }
+        #loading-progress-message {
+            position: fixed;
+          top: 80%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: white;
+          font-size: 14px;
+        }
+        .coin-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 15px;
+            color: white;
+            animation: fadeOut 1s ease-in-out;
+            pointer-events: none;
+            cursor: none;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translate(100%, -100%) scale(1); }
+            100% { opacity: 0; transform: translate(150%, -50%) scale(1.5); }
+        }
+        #progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            width: 100%;
+        }
+        #progress-bar {
+            width: 200px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 5px;
+            margin: 0 10px;
+            position: relative;
+            padding: 0;
+        }
+        #progress-bar-fill {
+            height: 100%;
+            background-color: #00ffff;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+        #progress-text {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -136,56 +331,51 @@
             color: white;
             font-size: 12px;
         }
-        /* Экран приветствия */
-        #welcome-screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            top: 0;
-            left: 0;
+        #current-level, #next-level {
+            color: #00ffff;
+        }
+        #airdrop-info {
+            margin-top: 20px;
+            font-size: 15px;
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 2px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: textShadow 2s infinite;
+        }
+        #light-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 999;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,255,255,0.6) 0%, rgba(0,255,255,0) 100%);
+            animation: changeColor 10s infinite;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease-in-out;
         }
-        #welcome-screen h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
+        @keyframes changeColor {
+            0% { background: radial-gradient(circle, rgba(0,255,255,0.6) 0%, rgba(0,255,255,0) 100%); }
+            50% { background: radial-gradient(circle, rgba(0,191,255,0.6) 0%, rgba(0,191,255,0) 100%); }
+            100% { background: radial-gradient(circle, rgba(0,255,255,0.6) 0%, rgba(0,255,255,0) 100%); }
         }
-        #welcome-screen p {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-        /* Навигационные кнопки */
-        .nav-buttons {
-            position: fixed;
-            bottom: 2%;
-            display: flex;
-            gap: 10px;
-            width: 90%;
-            max-width: 500px;
-        }
-        .nav-button {
-            flex: 1;
-            text-decoration: none;
-            font-size: 16px;
-        }
-        /* Меню */
         #menu-button {
             position: fixed;
             top: 10px;
             right: 10px;
             background-color: rgba(255, 255, 255, 0.2);
-            border: none;
+            border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1001;
-            font-size: 24px;
+            color: #ffffff;
+            animation: textShadow 2s infinite;
         }
         #menu-button:hover {
             transform: scale(1.05);
@@ -202,7 +392,7 @@
             right: 0;
             width: 200px;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 0, 0, 0.8);
             transform: translateX(100%);
             transition: transform 0.3s;
             display: flex;
@@ -214,254 +404,115 @@
         #menu.open {
             transform: translateX(0);
         }
-        /* Мини-окна */
+        #menu button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            animation: textShadow 2s infinite;
+            width: 80%;
+        }
+        #menu button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        #menu button:active {
+            background-color: #00ffff;
+            transform: scale(0.95);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
         .mini-window {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.8);
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
             color: #ffffff;
             display: none;
-            z-index: 1002;
-            width: 80%;
-            max-width: 400px;
+            z-index: 1001;
         }
         .mini-window.open {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: block;
         }
-        /* Главные страницы */
-        .page {
-            display: none;
+        #gradientSelect, #applyGradientButton, #settings-close-button {
+            font-size: 24px;
+            margin: 20px;
+        }
+        #welcome-screen {
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            padding: 20px;
-            overflow-y: auto;
+            background-color: black;
+            z-index: 1000;
         }
-        .page.active {
-            display: flex;
-        }
-        /* Основные элементы игры */
-        .name, h1, h3, #shareButton, #dailyBonus, #score, #upgscore, #nameupg {
+        #welcome-screen h1 {
+            font-size: 36px;
             margin-bottom: 20px;
         }
-        .name, #score, #upgscore, #nameupg {
-            font-size: 36px;
+        #welcome-screen p {
+            font-size: 18px;
+            margin-bottom: 20px;
         }
-        #shareButton, #dailyBonus {
+        #welcome-screen button {
             font-size: 16px;
-            cursor: pointer;
-        }
-        #coin {
-            width: 150px;
-            height: 150px;
-            background-color: transparent;
-            border-radius: 50%;
-            margin: 20px 0;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            cursor: pointer;
-        }
-        #coin:active {
-            animation: coinPress 0.3s;
-        }
-        @keyframes coinPress {
-            0%, 100% { transform: scale(1); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
-            50% { transform: scale(0.95); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
-        }
-        #score, #upgscore {
-            font-size: 28px;
-            background-color: rgba(255, 255, 255, 0.2);
             padding: 10px 20px;
+            background-color: #00bfff;
+            border: none;
             border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        #upgscore {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 16px;
-            max-width: 150px;
-        }
-        #nameupg {
-            position: fixed;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 26px;
-        }
-        #progress-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-            width: 100%;
-        }
-        #progress-bar {
-            width: 200px;
-            height: 20px;
-            background-color: #ccc;
-            border-radius: 5px;
-            margin: 0 10px;
-            position: relative;
-            overflow: hidden;
-        }
-        #progress-bar-fill {
-            height: 100%;
-            background-color: #00ffff;
-            width: 0;
-            transition: width 0.3s;
-        }
-        #progress-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 12px;
-        }
-        #dailyBonus {
-            font-size: 16px;
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        /* Страница апгрейдов */
-        #upgrades {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            max-width: 800px;
-            justify-content: center;
-        }
-        .upgrade {
-            flex: 1 1 150px;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: textShadow 2s infinite;
+            color: #ffffff;
+            transition: background-color 0.3s;
         }
-        .upgrade:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
-        .upgrade:active {
-            background-color: #00ffff;
-            transform: scale(0.95);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        /* Аирдроп страница */
-        #airdrop-info {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin: 20px 0;
-            width: 80%;
-            max-width: 400px;
-        }
-        /* Эффекты */
-        .coin-effect {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 20px;
-            color: white;
-            animation: fadeOut 1s ease-in-out;
-            pointer-events: none;
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            to { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
-        }
-        /* Адаптивность */
-        @media (max-width: 600px) {
-            .name, #score, #upgscore, #nameupg {
-                font-size: 24px;
-            }
-            #coin {
-                width: 110px;
-                height: 110px;
-            }
-            .upgrade {
-                padding: 10px;
-                font-size: 14px;
-            }
-            .nav-buttons {
-                flex-direction: column;
-                gap: 5px;
-            }
-            #menu {
-                width: 100%;
-            }
+        #welcome-screen button:hover {
+            background-color: #009acd;
         }
     </style>
 </head>
 <body>
-    <!-- Фоновые звезды -->
     <div class="stars"></div>
-
-    <!-- Экран загрузки -->
     <div id="loading-screen">
         <div id="loading-spinner"></div>
-        <div id="loading-text">Загрузка...</div>
+        <div id="loading-text">Loading</div>
         <div id="loading-progress">
             <div id="loading-progress-bar"></div>
             <div id="loading-progress-text">0%</div>
         </div>
         <div id="loading-progress-message">Зачаруй все кристаллы Лилика!</div>
     </div>
-
-    <!-- Экран приветствия -->
-    <div id="welcome-screen">
-        <h1>Добро пожаловать в Lilik Enchantment!</h1>
-        <p>Начните свое волшебное путешествие прямо сейчас!</p>
-        <button class="btn" id="start-button">Начать добычу</button>
+    <div id="welcome-screen" style="display: none;">
+    <h1>Добро пожаловать в Lilik Enchantment!</h1>
+    <p>Начните свое волшебное путешествие прямо сейчас!</p>
+    <button id="start-button">Начать добычу</button>
     </div>
-
-    <!-- Навигационные кнопки -->
+    <div id="nav-place"></div>
     <div class="nav-buttons">
-        <a href="#mine" class="nav-button btn">💠 Enchanting</a>
-        <a href="#upgrade" class="nav-button btn">🌀 Upgrade</a>
-        <a href="#airdrop" class="nav-button btn">🌙 Moondrop</a>
+        <a href="#mine" class="nav-button">💠 Enchanting</a>
+        <a href="#upgrade" class="nav-button">🌀 Upgrade</a>
+        <a href="#airdrop" class="nav-button">🌙 Moondrop</a>
     </div>
-
-    <!-- Кнопка меню -->
-    <button id="menu-button">☰</button>
-
-    <!-- Меню -->
+    <div id="menu-button">☰</div>
     <div id="menu">
-        <button class="btn" data-target="settings">Настройки</button>
-        <button class="btn" data-target="support">Поддержка</button>
-        <button class="btn" data-target="info">Информация</button>
+        <button id="settings-button">Настройки</button>
+        <button id="support-button">Поддержка</button>
+        <button id="info-button">Информация</button>
     </div>
-
-    <!-- Мини-окна -->
-    <div class="mini-window" id="settings-window">
+    <div id="settings-window" class="mini-window">
         <h2>Настройки</h2>
-        <label for="gradientSelect">Выбрать цвет заднего фона:</label>
+        <div>Выбрать цвет заднего фона:</div>
         <select id="gradientSelect">
             <option value="radial-gradient(circle at center, #000000, #191970)">Blue Cosmic</option>
             <option value="linear-gradient(120deg, #8e44ad, #2196f3, #21cbf5, #4caf50, #ffeb3b, #ff9800, #ff5722, #f44336, #9c27b0)">Rainbow</option>
@@ -476,69 +527,45 @@
             <option value="linear-gradient(to right, #ff416c, #ff4b2b)">Sunset Orange</option>
             <option value="linear-gradient(to right, #85ffbd, #fffb7d)">Spring Warmth</option>
         </select>
-        <button class="btn" id="applyGradientButton">Применить</button>
-        <div class="btn" id="resetButton">Сбросить весь прогресс</div>
-        <button class="btn" id="settings-close-button">Закрыть</button>
-    </div>
-
-    <div class="mini-window" id="support-window">
-        <h2>Поддержка</h2>
-        <p>При неполадках обращайтесь к силе Кристалла</p>
-        <button class="btn" id="support-close-button">Закрыть</button>
-    </div>
-
-    <div class="mini-window" id="info-window">
-        <h2>Информация</h2>
-        <p>Это игра-кликер. Кликай по Кристаллу и получай очки!</p>
-        <p>Идейный вдохновитель - LiliFox</p>
-        <button class="btn" id="info-close-button">Закрыть</button>
-    </div>
-
-    <!-- Страницы приложения -->
-    <div id="mine" class="page active">
-        <div class="name animated-text">Lilik Enchantment</div>
-        <div id="coin">
-            <img src="https://raw.githubusercontent.com/0x2171/Lilik-Enchantment/main/images/u2b50_u1f48e.png" alt="Coin" style="width: 90%; height: 90%;">
-            <div id="light-effect"></div>
+        <button id="applyGradientButton">Apply</button>
+        <div>Сбросить весь прогресс:</div>
+        <div id="resetButton">Reset all progress</div>
+            <button id="settings-close-button">Close</button>
         </div>
-        <div id="score" class="animated-text">Sparks: 0</div>
+        <div id="support-window" class="mini-window">
+            <h2>Поддержка</h2>
+            <p>При неполадках обращаться к силе Кристалла</p>
+        </div>
+        <div id="info-window" class="mini-window">
+            <h2>Информация</h2>
+            <p>Это игра-кликер. Кликай по Кристаллу и получай очки!</p>
+            <p>Идейный вдохновитель - LiliFox</p>
+    </div>
+    <div id="mine" class="page active">
+        <div class="name">Lilik Enchantment</div>
+        <div id="coin">
+            <img src="https://raw.githubusercontent.com/0x2171/Lilik-Enchantment/refs/heads/main/images/u2b50_u1f48e.png" alt="Coin" style="width: 90%; height: 90%;">
+        </div>
+        <div id="score">Sparks: 0</div>
         <div id="progress-container">
             <div id="current-level">1</div>
             <div id="progress-bar">
                 <div id="progress-bar-fill"></div>
-                <div id="progress-text">0%</div>
+                <div id="progress-text"></div>
             </div>
-            <div id="next-level">2</div>
+        <div id="next-level">2</div>
         </div>
-        <div id="dailyBonus" class="animated-text">Daily Bonus: Click to claim!</div>
+        <div id="dailyBonus">Daily Bonus: Click to claim!</div>
     </div>
-
     <div id="upgrade" class="page">
-        <div id="upgscore" class="animated-text">Sparks: 0</div>
+        <div id="upgscore">Sparks: 0</div>
         <div id="upgrades">
-            <div class="upgrade" data-index="0">
-                <span style="font-size: 50px;">🚀</span>
-                <span>Coins +1</span>
-                <span>(Cost: 2248)</span>
-            </div>
-            <div class="upgrade" data-index="1">
-                <span style="font-size: 50px;">🛸</span>
-                <span>Coins +2</span>
-                <span>(Cost: 5000)</span>
-            </div>
-            <div class="upgrade" data-index="2">
-                <span style="font-size: 50px;">🌌</span>
-                <span>Coins +3</span>
-                <span>(Cost: 10000)</span>
-            </div>
-            <div class="upgrade" data-index="3">
-                <span style="font-size: 50px;">🌠</span>
-                <span>Coins +5</span>
-                <span>(Cost: 15000)</span>
-            </div>
+            <div class="upgrade" id="upgrade1"></div>
+            <div class="upgrade" id="upgrade2"></div>
+            <div class="upgrade" id="upgrade3"></div>
+            <div class="upgrade" id="upgrade4"></div>
         </div>
     </div>
-
     <div id="airdrop" class="page">
         <h1>Moondrop</h1>
         <h3>Listing Information</h3>
@@ -546,295 +573,298 @@
             <p>Coin Name: Lilik Spark</p>
             <p>Ticker: LILIK</p>
             <p>Total Supply: 500 Telegram Stars</p>
-            <p>Circulating Supply: TBD</p>
+            <p>Circulating Supply: </p>
             <p>Moondrop Date: TBA</p>
             <p>Moondrop Amount: TBA</p>
         </div>
-        <div id="shareButton" class="btn animated-text">Share your progress</div>
+        <div id="shareButton">Share your progress</div>
     </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Элементы DOM
-            const loadingScreen = document.getElementById('loading-screen');
-            const loadingProgressBar = document.getElementById('loading-progress-bar');
-            const loadingProgressText = document.getElementById('loading-progress-text');
-            const welcomeScreen = document.getElementById('welcome-screen');
-            const startButton = document.getElementById('start-button');
-            const navButtons = document.querySelectorAll('.nav-button');
-            const pages = document.querySelectorAll('.page');
-            const menuButton = document.getElementById('menu-button');
-            const menu = document.getElementById('menu');
-            const miniWindows = document.querySelectorAll('.mini-window');
-            const upgradeButtons = document.querySelectorAll('.upgrade');
-            const scoreDisplay = document.getElementById('score');
-            const upgScoreDisplay = document.getElementById('upgscore');
-            const coin = document.getElementById('coin');
-            const progressBarFill = document.getElementById('progress-bar-fill');
-            const progressText = document.getElementById('progress-text');
-            const currentLevelDisplay = document.getElementById('current-level');
-            const nextLevelDisplay = document.getElementById('next-level');
-            const dailyBonus = document.getElementById('dailyBonus');
-            const resetButton = document.getElementById('resetButton');
-            const shareButton = document.getElementById('shareButton');
-            const gradientSelect = document.getElementById('gradientSelect');
-            const applyGradientButton = document.getElementById('applyGradientButton');
-            const settingsWindow = document.getElementById('settings-window');
-            const supportWindow = document.getElementById('support-window');
-            const infoWindow = document.getElementById('info-window');
-            const settingsCloseButton = document.getElementById('settings-close-button');
-            const supportCloseButton = document.getElementById('support-close-button');
-            const infoCloseButton = document.getElementById('info-close-button');
-            const lightEffect = document.getElementById('light-effect');
+        const gradientSelect = document.getElementById('gradientSelect');
+        const applyGradientButton = document.getElementById('applyGradientButton');
 
-            // Игра: состояния
-            let score = 0;
-            let coinValue = 1;
-            let upgradeCosts = [2248, 5000, 10000, 15000];
-            const upgradeValues = [1, 2, 3, 5];
-            const upgradeMultipliers = [2, 3, 3, 4];
-            const upgradeImages = ['🚀', '🛸', '🌌', '🌠'];
-            const levels = [5000, 15000, 50000, 250000, 500000, 1000000, 5000000, 25000000, 50000000, 125000000, 500000000, 1000000000, 5000000000];
-            let currentLevel = 1;
+        applyGradientButton.addEventListener('click', () => {
+        const gradientValue = gradientSelect.value;
+        if (gradientValue) {
+            document.body.style.background = gradientValue;
+        }});
 
-            // Прогресс загрузки
-            let loadingProgress = 0;
-            const loadingInterval = setInterval(() => {
-                loadingProgress += 6;
-                loadingProgressBar.style.width = `${loadingProgress}%`;
-                loadingProgressText.textContent = `${loadingProgress}%`;
-                if (loadingProgress >= 100) {
-                    clearInterval(loadingInterval);
-                    loadingScreen.style.display = 'none';
-                    welcomeScreen.style.display = 'flex';
+        const tgwindow = window.Telegram.WebApp;
+        tgwindow.isExpanded;
+        tgwindow.expand();
+        const loadingProgressBar = document.getElementById('loading-progress-bar');
+        const loadingProgressText = document.getElementById('loading-progress-text');
+        let loadingProgress = 0;
+        const loadingInterval = setInterval(() => {
+            loadingProgress += 6;
+            loadingProgressBar.style.width = `${loadingProgress}%`;
+            loadingProgressText.textContent = `${loadingProgress}%`;
+            if (loadingProgress >= 100) {
+                clearInterval(loadingInterval);
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('welcome-screen').style.display = 'flex'; // Показать второе окно
+            }
+        }, 100);
+        document.getElementById('start-button').addEventListener('click', () => {
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('mine').classList.add('active'); // Показать основную страницу
+        });
+
+        let score = 0;
+        let upgradeCosts = [2248, 5000, 10000, 15000];
+        let coinValue = 1;
+        let currentLevel = 1;
+        const levels = [5000, 15000, 50000, 250000, 500000, 1000000, 5000000, 25000000, 50000000, 125000000, 500000000, 1000000000, 5000000000];
+        const scoreDisplay = document.getElementById('score');
+        const upgScoreDisplay = document.getElementById('upgscore');
+        const coin = document.getElementById('coin');
+        const upgrades = document.querySelectorAll('.upgrade');
+        const upgradeValues = [1, 2, 3, 5];
+        const upgradeMultipliers = [2, 3, 3, 4];
+        const upgradeImages = ['🚀', '🛸', '🌌', '🌠'];
+        const currentLevelDisplay = document.getElementById('current-level');
+        const nextLevelDisplay = document.getElementById('next-level');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const progressText = document.getElementById('progress-text');
+        const dailyBonus = document.getElementById('dailyBonus');
+        const resetButton = document.getElementById('resetButton');
+        const shareButton = document.getElementById('shareButton');
+        let lightIntensity = 0;
+        const maxLightIntensity = 1;
+        const fadeInterval = 300;
+        const lightEffect = document.createElement('div');
+        lightEffect.id = 'light-effect';
+        coin.appendChild(lightEffect);
+        function updateLightEffect() {
+            lightEffect.style.opacity = lightIntensity;
+            lightEffect.style.background = `radial-gradient(circle, rgba(0,${getColorComponent()},${getColorComponent()},0.6) 0%, rgba(0,${getColorComponent()},${getColorComponent()},0) 100%)`;
+        }
+        function getColorComponent() {
+            const hue = Math.floor(lightIntensity * 255);
+            return hue < 128 ? hue * 2 : 255 - (hue - 128) * 2;
+        }
+        function fadeLightEffect() {
+            if (lightIntensity > 0) {
+                lightIntensity -= 0.1;
+                if (lightIntensity < 0) {
+                    lightIntensity = 0;
                 }
-            }, 100);
-
-            // Запуск игры
-            startButton.addEventListener('click', () => {
-                welcomeScreen.style.display = 'none';
-                showPage('mine');
-            });
-
-            // Навигация по страницам
-            navButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const target = button.getAttribute('href').substring(1);
-                    showPage(target);
-                });
-            });
-
-            function showPage(pageId) {
-                pages.forEach(page => page.classList.remove('active'));
-                document.getElementById(pageId).classList.add('active');
+                updateLightEffect();
             }
-
-            // Меню
-            menuButton.addEventListener('click', () => {
-                menu.classList.toggle('open');
-            });
-
-            menu.querySelectorAll('button').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const target = btn.dataset.target;
-                    openMiniWindow(target);
-                    menu.classList.remove('open');
-                });
-            });
-
-            function openMiniWindow(target) {
-                miniWindows.forEach(win => {
-                    if (win.id === `${target}-window`) {
-                        win.classList.add('open');
-                    } else {
-                        win.classList.remove('open');
-                    }
-                });
+        }
+        coin.addEventListener('click', () => {
+            score += coinValue;
+            updateScore();
+            updateLevel();
+            showCoinEffect(coinValue);
+            if (lightIntensity < maxLightIntensity) {
+                lightIntensity += 0.1;
+                if (lightIntensity > maxLightIntensity) {
+                    lightIntensity = maxLightIntensity;
+                }
+                updateLightEffect();
             }
-
-            // Закрытие мини-окон
-            [settingsCloseButton, supportCloseButton, infoCloseButton].forEach(btn => {
-                btn.addEventListener('click', () => {
-                    btn.parentElement.classList.remove('open');
-                });
-            });
-
-            // Апгрейды
-            upgradeButtons.forEach((upgrade, index) => {
-                upgrade.addEventListener('click', () => {
-                    if (score >= upgradeCosts[index]) {
-                        score -= upgradeCosts[index];
-                        coinValue += upgradeValues[index];
-                        upgradeCosts[index] *= upgradeMultipliers[index];
-                        updateUpgrades();
-                        updateScore();
-                    }
-                });
-            });
-
-            // Клик по монете
-            coin.addEventListener('click', () => {
-                score += coinValue;
-                updateScore();
-                updateLevel();
-                showCoinEffect(coinValue);
-                triggerLightEffect();
-            });
-
-            // Ежедневный бонус
-            dailyBonus.addEventListener('click', () => {
-                const today = new Date().toDateString();
-                const lastClaim = localStorage.getItem('lastDailyClaim');
-                if (lastClaim !== today) {
-                    const bonus = 1000;
-                    score += bonus;
+            clearInterval(fadeIntervalId);
+            fadeIntervalId = setInterval(fadeLightEffect, fadeInterval);
+        });
+        let fadeIntervalId = setInterval(fadeLightEffect, fadeInterval);
+        upgrades.forEach((upgrade, index) => {
+            upgrade.addEventListener('click', () => {
+                if (score >= upgradeCosts[index]) {
+                    score -= upgradeCosts[index];
+                    coinValue += upgradeValues[index];
+                    upgradeCosts[index] *= upgradeMultipliers[index];
                     updateScore();
-                    localStorage.setItem('lastDailyClaim', today);
-                    dailyBonus.style.display = 'none';
-                    alert(`Вы получили ежедневный бонус: ${bonus} Sparks 💠`);
-                } else {
-                    alert('Вы уже получили ежедневный бонус сегодня 💠');
+                    upgrade.innerHTML = `<span style="font-size: 50px;">${upgradeImages[index]}</span> Coins +${upgradeValues[index]} (Cost: ${upgradeCosts[index]})`;
                 }
             });
-
-            // Сброс прогресса
-            resetButton.addEventListener('click', () => {
-                if (confirm('Вы уверены, что хотите сбросить весь прогресс?')) {
-                    resetGame();
+        });
+        function updateScore() {
+            scoreDisplay.textContent = `Sparks: ${score}`;
+            upgScoreDisplay.textContent = `Sparks: ${score}`;
+            localStorage.setItem('lilikScore', score);
+            localStorage.setItem('lilikCoinValue', coinValue);
+            upgradeCosts.forEach((cost, index) => {
+                localStorage.setItem(`lilikUpgrade${upgradeValues[index]}Cost`, cost);
+            });
+        }
+        function updateLevel() {
+            for (let i = 0; i < levels.length; i++) {
+                if (score < levels[i]) {
+                    currentLevel = i + 1;
+                    break;
                 }
-            });
-
-            // Поделиться прогрессом
-            shareButton.addEventListener('click', () => {
-                const shareText = `У меня ${score} Sparks и уровень ${currentLevel} в игре Lilik Enchantment! Присоединяйся @LilikEnchant_bot`;
-                if (navigator.share) {
-                    navigator.share({
-                        title: 'Lilik Enchantment',
-                        text: shareText
-                    }).catch(err => console.error('Ошибка при поделиться:', err));
-                } else {
-                    const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareText)}`;
-                    window.open(telegramUrl, '_blank');
-                }
-            });
-
-            // Применение градиента
-            applyGradientButton.addEventListener('click', () => {
-                const gradient = gradientSelect.value;
-                document.body.style.background = gradient;
-                localStorage.setItem('selectedGradient', gradient);
-            });
-
-            // Инициализация
-            loadGame();
-            checkDailyBonus();
-            generateStars();
-
-            // Функции
-            function updateScore() {
-                scoreDisplay.textContent = `Sparks: ${score}`;
-                upgScoreDisplay.textContent = `Sparks: ${score}`;
-                localStorage.setItem('score', score);
-                localStorage.setItem('coinValue', coinValue);
             }
-
-            function updateLevel() {
-                let newLevel = currentLevel;
-                for (let i = 0; i < levels.length; i++) {
-                    if (score >= levels[i]) {
-                        newLevel = i + 1;
-                    } else {
-                        break;
-                    }
-                }
-                if (newLevel !== currentLevel) {
-                    currentLevel = newLevel;
-                    localStorage.setItem('currentLevel', currentLevel);
-                }
-                currentLevelDisplay.textContent = currentLevel;
-                nextLevelDisplay.textContent = currentLevel + 1;
-                const currentLevelThreshold = levels[currentLevel - 2] || 0;
-                const nextLevelThreshold = levels[currentLevel - 1] || currentLevelThreshold + 1000000;
-                const progress = ((score - currentLevelThreshold) / (nextLevelThreshold - currentLevelThreshold)) * 100;
-                progressBarFill.style.width = `${Math.min(progress, 100)}%`;
-                progressText.textContent = `${Math.round(Math.min(progress, 100))}%`;
+            currentLevelDisplay.textContent = currentLevel;
+            nextLevelDisplay.textContent = currentLevel + 1;
+            const progress = (score - (levels[currentLevel - 2] || 0)) / (levels[currentLevel - 1] - (levels[currentLevel - 2] || 0)) * 100;
+            progressBarFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
+        }
+        function loadScore() {
+            const savedScore = localStorage.getItem('lilikScore');
+            const savedCoinValue = localStorage.getItem('lilikCoinValue');
+            const savedCurrentLevel = localStorage.getItem('lilikCurrentLevel');
+            if (savedScore !== null) {
+                score = parseInt(savedScore, 10);
             }
-
-            function updateUpgrades() {
-                upgradeButtons.forEach((upgrade, index) => {
-                    upgrade.querySelector('span:nth-child(3)').textContent = `(Cost: ${upgradeCosts[index]})`;
-                });
+            if (savedCoinValue !== null) {
+                coinValue = parseInt(savedCoinValue, 10);
             }
-
-            function resetGame() {
-                score = 0;
-                coinValue = 1;
-                upgradeCosts = [2248, 5000, 10000, 15000];
-                currentLevel = 1;
+            if (savedCurrentLevel !== null) {
+                currentLevel = parseInt(savedCurrentLevel, 10);
+            }
+            upgradeCosts.forEach((cost, index) => {
+                const savedCost = localStorage.getItem(`lilikUpgrade${upgradeValues[index]}Cost`);
+                if (savedCost !== null) {
+                    upgradeCosts[index] = parseInt(savedCost, 10);
+                }
+            });
+            updateScore();
+            updateLevel();
+            upgrades.forEach((upgrade, index) => {
+                upgrade.innerHTML = `<span style="font-size: 50px;">${upgradeImages[index]}</span> Coins +${upgradeValues[index]} (Cost: ${upgradeCosts[index]})`;
+            });
+        }
+        resetButton.addEventListener('click', () => {
+            score = 0;
+            coinValue = 1;
+            upgradeCosts = [500, 2000, 4000, 5000];
+            currentLevel = 1;
+            updateScore();
+            updateLevel();
+            localStorage.clear();
+        });
+        function checkDailyBonus() {
+            const lastClaim = localStorage.getItem('lastDailyClaim');
+            const today = new Date().toDateString();
+            if (lastClaim !== today) {
+                dailyBonus.style.display = 'block';
+            } else {
+                dailyBonus.style.display = 'none';
+            }
+        }
+        dailyBonus.addEventListener('click', () => {
+            const lastClaim = localStorage.getItem('lastDailyClaim');
+            const today = new Date().toDateString();
+            if (lastClaim !== today) {
+                const lastBonusAmount = parseInt(localStorage.getItem('lastBonusAmount') || '0', 10);
+                const newBonusAmount = lastBonusAmount + 1000;
+                score += newBonusAmount;
                 updateScore();
-                updateLevel();
-                updateUpgrades();
-                localStorage.clear();
-                alert('Прогресс был сброшен.');
-            }
-
-            function loadGame() {
-                score = parseInt(localStorage.getItem('score')) || 0;
-                coinValue = parseInt(localStorage.getItem('coinValue')) || 1;
-                currentLevel = parseInt(localStorage.getItem('currentLevel')) || 1;
-                upgradeCosts = [
-                    parseInt(localStorage.getItem('upgradeCost0')) || 2248,
-                    parseInt(localStorage.getItem('upgradeCost1')) || 5000,
-                    parseInt(localStorage.getItem('upgradeCost2')) || 10000,
-                    parseInt(localStorage.getItem('upgradeCost3')) || 15000
-                ];
-                const savedGradient = localStorage.getItem('selectedGradient');
-                if (savedGradient) {
-                    document.body.style.background = savedGradient;
-                    gradientSelect.value = savedGradient;
-                }
-                updateScore();
-                updateLevel();
-                updateUpgrades();
-            }
-
-            function checkDailyBonus() {
-                const today = new Date().toDateString();
-                const lastClaim = localStorage.getItem('lastDailyClaim');
-                dailyBonus.style.display = lastClaim !== today ? 'block' : 'none';
-            }
-
-            function showCoinEffect(value) {
-                const effect = document.createElement('div');
-                effect.classList.add('coin-effect');
-                effect.textContent = `+${value}`;
-                coin.appendChild(effect);
-                setTimeout(() => coin.removeChild(effect), 1000);
-            }
-
-            function triggerLightEffect() {
-                lightEffect.style.opacity = 1;
-                setTimeout(() => {
-                    lightEffect.style.opacity = 0;
-                }, 500);
-            }
-
-            function generateStars() {
-                const starsContainer = document.querySelector('.stars');
-                for (let i = 0; i < 200; i++) {
-                    const star = document.createElement('div');
-                    star.classList.add('star');
-                    star.style.top = `${Math.random() * 100}vh`;
-                    star.style.left = `${Math.random() * 100}vw`;
-                    const size = Math.random() * 2 + 1;
-                    star.style.width = `${size}px`;
-                    star.style.height = `${size}px`;
-                    star.style.animationDuration = `${Math.random() * 3 + 2}s`;
-                    starsContainer.appendChild(star);
-                }
+                localStorage.setItem('lastDailyClaim', today);
+                localStorage.setItem('lastBonusAmount', newBonusAmount);
+                alert(`You claimed your daily bonus of ${newBonusAmount} sparks 💠`);
+                dailyBonus.style.display = 'none';
+            } else {
+                alert('You have already claimed your daily bonus today 💠');
             }
         });
+        const navButtons = document.querySelectorAll('.nav-button');
+        navButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                const targetId = event.target.getAttribute('href').substring(1);
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+        function showCoinEffect(value) {
+            const effect = document.createElement('div');
+            effect.className = 'coin-effect';
+            effect.textContent = `+${value}`;
+            coin.appendChild(effect);
+            setTimeout(() => {
+                coin.removeChild(effect);
+            }, 1000);
+        }
+        shareButton.addEventListener('click', () => {
+            const shareText = `I have ${score} Lilik Sparks and I am at level ${currentLevel} in Lilik Enchantment! Join @LilikEnchant_bot`;
+            if (!navigator.share) {
+                const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareText)}`;
+                window.open(telegramUrl, '_blank');
+            } else {
+                navigator.share({
+                    title: 'Lilik Enchantment',
+                    text: shareText
+                }).catch(error => console.error('Error sharing:', error));
+            }
+        });
+        const starsContainer = document.querySelector('.stars');
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.top = `${Math.random() * 100}vh`;
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.width = `${Math.random() * 2 + 1}px`;
+            star.style.height = `${Math.random() * 2 + 1}px`;
+            star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            starsContainer.appendChild(star);
+        }
+        loadScore();
+        checkDailyBonus();
+
+        const preloadImage = new Image();
+        preloadImage.src = 'https://raw.githubusercontent.com/0x2171/Lilik-Enchantment/refs/heads/main/images/AppArt.png';
+        preloadImage.onload = () => {
+            localStorage.setItem('backgroundImageLoaded', 'true');
+        };
+
+        // Menu button functionality
+        const menuButton = document.getElementById('menu-button');
+        const menu = document.getElementById('menu');
+        const settingsButton = document.getElementById('settings-button');
+        const supportButton = document.getElementById('support-button');
+        const infoButton = document.getElementById('info-button');
+        const settingsWindow = document.getElementById('settings-window');
+        const settingsCloseWindow = document.getElementById('settings-close-button');
+        const supportWindow = document.getElementById('support-window');
+        const infoWindow = document.getElementById('info-window');
+
+        menuButton.addEventListener('click', () => {
+            menu.classList.toggle('open');
+        });
+
+        settingsButton.addEventListener('click', () => {
+            settingsWindow.classList.add('open');
+            menu.classList.remove('open');
+        });
+
+        supportButton.addEventListener('click', () => {
+            supportWindow.classList.add('open');
+            menu.classList.remove('open');
+        });
+
+        infoButton.addEventListener('click', () => {
+            infoWindow.classList.add('open');
+            menu.classList.remove('open');
+        });
+
+        settingsCloseWindow.addEventListener('click', () => {
+            settingsWindow.classList.remove('open');
+        });
+
+        supportWindow.addEventListener('click', () => {
+            supportWindow.classList.remove('open');
+        });
+
+        infoWindow.addEventListener('click', () => {
+            infoWindow.classList.remove('open');
+        });
+
+        applyGradientButton.addEventListener('click', () => {
+        const gradientValue = gradientSelect.value;
+        if (gradientValue) {
+            document.body.style.background = gradientValue;
+            localStorage.setItem('selectedGradient', gradientValue);
+        }
+        });
+        const savedGradient = localStorage.getItem('selectedGradient');
+        if (savedGradient) {
+        document.body.style.background = savedGradient;
+        }
     </script>
 </body>
 </html>
